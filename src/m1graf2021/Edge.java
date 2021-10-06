@@ -29,7 +29,7 @@ public class Edge implements Comparable<Edge> {
         this.idFrom = idFrom;
     }
 
-    public Node from( ) {
+    public Node from() {
         return from;
     }
 
@@ -39,27 +39,14 @@ public class Edge implements Comparable<Edge> {
 
     public Edge getSymmetric() {
 
-return
     }
 
     boolean isSelfLoop() {
-    if (idTo == idFrom){
-    return  true;
-    }
-    else{
-     return false;
-    }
+
     }
 
     @Override
     public int compareTo(Edge edge) {
-        if (edge.idFrom > Edge.this.idFrom){
-            return -1;
-        }else if (Edge.this.idFrom> edge.idFrom){
-            return 1;
-        }else
-        {
-            return 0;
-        }
+        return 0;
     }
 }
