@@ -1,6 +1,6 @@
 package m1graf2021;
 
-public class Edge implements Comparable<Edge> {
+public class Edge {
     private Node from;
     private Node to;
     private int weight;
@@ -52,10 +52,5 @@ public class Edge implements Comparable<Edge> {
             return false;
         }
         return this.from.equals(((Edge) obj).from) && this.to.equals(((Edge) obj).to);
-    }
-
-    @Override
-    public int compareTo(Edge edge) {
-        return 0;
     }
 }

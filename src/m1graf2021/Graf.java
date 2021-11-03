@@ -178,11 +178,9 @@ public class Graf {
     }
 
     public void removeEdge(Node from, Node to) {
-
     }
 
     public void removeEdge(int fromId, int toId) {
-
     }
 
     public  List<Edge> GetOutEdges(Node n){
@@ -238,7 +236,6 @@ public class Graf {
     }
 
     public void toDotFile(String fileName){
-
     }
 
 }
