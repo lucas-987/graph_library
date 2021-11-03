@@ -3,9 +3,10 @@ package m1graf2021;
 public class Edge implements Comparable<Edge> {
     private Node from;
     private Node to;
-    private int idTo;
     private int weight;
-    private int idFrom;
+    
+   int idFrom ;
+    int idTo;
 
     public Edge(Node from, Node to) {
         this.from = from;
@@ -24,9 +25,9 @@ public class Edge implements Comparable<Edge> {
     }
 
     public Edge(int idTo, int weight, int idFrom) {
-        this.idTo = idTo;
+        this.idTo = to.getId();
         this.weight = weight;
-        this.idFrom = idFrom;
+        this.idFrom =from.getId() ;
     }
 
     public Node from( ) {
@@ -38,28 +39,27 @@ public class Edge implements Comparable<Edge> {
     }
 
     public Edge getSymmetric() {
+return Edge.this;
 
-return
     }
 
     boolean isSelfLoop() {
-    if (idTo == idFrom){
-    return  true;
-    }
-    else{
-     return false;
-    }
+   
+
     }
 
     @Override
-    public int compareTo(Edge edge) {
-        if (edge.idFrom > Edge.this.idFrom){
-            return -1;
-        }else if (Edge.this.idFrom> edge.idFrom){
-            return 1;
-        }else
-        {
-            return 0;
-        }
+   public boolean equals(Object obj) {
+    	if( !(obj instanceof Edge) ) {
+    		
+    		return false;
+    		
+    	}
+    	return this.from.equals(((Edge) obj).from) && this.to.equals(((Edge) obj).to);
     }
+    
+    
+    
+
+    
 }
