@@ -1,9 +1,6 @@
 package m1graf2021;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Graf {
     Map<Node, List<Edge>> adjEdList;
@@ -76,7 +73,8 @@ public class Graf {
     public void removeNode(Node n) {
         adjEdList.remove(n);
         for(List<Edge> neighbors : adjEdList.values()) {
-            List<Edge> neighborsCopy = List.copyOf(neighbors);
+            List<Edge> neighborsCopy = new ArrayList<>();
+            Collections.copy(neighborsCopy, neighbors);
             for(Edge edge : neighborsCopy) {
                 if(edge.to().equals(n) || edge.from().equals(n))
                     neighbors.remove(edge);
@@ -211,9 +209,29 @@ public class Graf {
         return null;
     }
 
-    public int[][] toAdjMatrix(){
-        return null;
-    }
+    public int[][] toAdjMatrix( Map<Node, List<Edge>> adjEdList ){
+
+        int matrix [][] = new int[this.nbNodes()][this.nbNodes()];
+        for (int i = 0 ; i < matrix.length;i++ ){
+            for (int y = 0 ; y< matrix.length;y++){
+            matrix[i][y] = 0;
+            }//la je parcoure la matrice et je met des zero
+
+            for(Map.Entry entry : adjEdList.entrySet()){
+                List<Edge> list = (List)entry.getValue();
+              Node node= (Node)  entry.getKey();
+              int k = node.getId();
+                for (Edge e: list){
+                   matrix[k][e.idTo] = 1;// la je parcour la la map ou jsp quoi et je met des 1 :)
+                }
+            }
+        }
+
+
+
+        return matrix;
+
+    }//moi
 
     public Graf getReverse(){
         return null;
@@ -223,13 +241,55 @@ public class Graf {
         return null;
     }
 
-    public List<Node> getDFS(){
-        return null;
+/* les deux algorithme sont ecrit exactement de la meme dacon come dans le cours jsp esq c'est la meilleur solution
+* par exemple le DFS est en deux partie
+* si t'arrive pas a le comprendre va sur le cours
+* */
+    public List<Node> getDFS( Map<Node, List<Edge>> adjEdList ){
+        boolean visited[] = new boolean[getAllNodes().size()];
+        Node node = (Node) adjEdList.keySet();
+        List<Node> list = new LinkedList<>();
+        list =   DFSUtil(node.getId(),visited);
+        return list;
+    }//moi
+
+    private List<Node> DFSUtil(int v, boolean visited[]){
+        List<Node> listB = new LinkedList<>();
+       visited[v] = true;
+        Iterator<Edge> i = adjEdList.get(getNode(v)).listIterator();
+        while (i.hasNext()){
+            int n = i.next().idTo;
+            if (!visited[n]) {
+                List<Node> b =   DFSUtil(n,visited);
+                listB.addAll(b);
+            }
+        }
+
+        listB.add(getNode(v));
+        return listB;
     }
 
-    public List<Node> getBFS(){
-        return null;
-    }
+    public List<Node> getBFS(Map<Node, List<Edge>> adjEdList) {
+        boolean visited[] = new boolean[getAllNodes().size()];
+        LinkedList<Node> q =  new LinkedList<Node>();
+        Node node = (Node) adjEdList.keySet();
+        visited[node.getId()]= true;
+        q.add(node);
+
+        while (q.size() != 0){
+            Node s = q.poll();
+            Iterator<Edge> i = adjEdList.get(s).listIterator();
+            while (i.hasNext()){
+                int n = i.next().idTo;
+                if (!visited[n]){
+                    visited[n] =true;
+                    q.add(getNode(n));
+                }
+            }
+
+        }
+        return q;
+    }//moi
 
     public String toDotString(){
         return null;
