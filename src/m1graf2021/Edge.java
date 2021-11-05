@@ -13,7 +13,7 @@ public class Edge {
         this.to = to;
     }
 
-    public Edge(int idTo, int idFrom) {
+    public Edge(int idFrom, int idTo) {
         this.idTo = idTo;
         this.idFrom = idFrom;
     }
@@ -24,7 +24,7 @@ public class Edge {
         this.weight = weight;
     }
 
-    public Edge(int idTo, int weight, int idFrom) {
+    public Edge(int idFrom, int idTo, int weight) {
         this.idTo = to.getId();
         this.weight = weight;
         this.idFrom =from.getId() ;
@@ -39,7 +39,7 @@ public class Edge {
     }
 
     public Edge getSymmetric() {
-        return Edge.this;
+        return new Edge(this.to, this.from);
     }
 
     boolean isSelfLoop() {
