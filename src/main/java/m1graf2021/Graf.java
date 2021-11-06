@@ -12,29 +12,20 @@ public class Graf {
     public Graf(int... number) {
         this.adjEdList = new HashMap<>();
 
-        List<Integer> test = new ArrayList<>();
-
         if(number.length > 0) {
             //noeud1
             int currentNodeId = 1;
+            this.adjEdList.put(new Node(currentNodeId), new ArrayList<>());
+
             for(int i=0; i< number.length; i++) {
                 int val = number[i];
 
                 if(val == 0) {
-                    Node node = new Node(currentNodeId);
-                    List<Edge> edges = new ArrayList<>();
-                    for(int destNodeId : test) {
-                        edges.add(new Edge(currentNodeId, destNodeId));
-                    }
-
-                    adjEdList.put(node, edges);
-                    test = new ArrayList<>();
-
-                    if(i + 1 < number.length)
-                        currentNodeId++;
+                    currentNodeId++;
+                    this.adjEdList.put(new Node(currentNodeId), new ArrayList<>());
                 }
                 else {
-                    test.add(val);
+                    this.adjEdList.get(getNode(currentNodeId)).add(new Edge(currentNodeId, val));
                 }
             }
         }
@@ -66,6 +57,14 @@ public class Graf {
                 }
             }
         }
+    }
+
+    /**
+     * For testing purpose only
+     * @return
+     */
+    public Map<Node, List<Edge>> getAdjEdList() {
+        return this.adjEdList;
     }
 
     public int nbNodes() {
@@ -366,7 +365,7 @@ public class Graf {
         return successorArray;
     }
 
-    public int[][] toAdjMatrix( Map<Node, List<Edge>> adjEdList ){
+    public int[][] toAdjMatrix(){
 
         int matrix [][] = new int[this.nbNodes()][this.nbNodes()];
         for (int i = 0 ; i < matrix.length;i++ ){
@@ -374,17 +373,15 @@ public class Graf {
             matrix[i][y] = 0;
             }//la je parcoure la matrice et je met des zero
 
-            for(Map.Entry entry : adjEdList.entrySet()){
+            for(Map.Entry entry : this.adjEdList.entrySet()){
                 List<Edge> list = (List)entry.getValue();
               Node node= (Node)  entry.getKey();
               int k = node.getId();
                 for (Edge e: list){
-                   matrix[k][e.idTo] = 1;// la je parcour la la map ou jsp quoi et je met des 1 :)
+                   matrix[k][e.to().getId()] += 1;// la je parcour la la map ou jsp quoi et je met des 1 :)
                 }
             }
         }
-
-
 
         return matrix;
 
@@ -432,24 +429,24 @@ public class Graf {
         return new Graf(result);
     }
 
-/* les deux algorithme sont ecrit exactement de la meme dacon come dans le cours jsp esq c'est la meilleur solution
-* par exemple le DFS est en deux partie
-* si t'arrive pas a le comprendre va sur le cours
-* */
-    public List<Node> getDFS( Map<Node, List<Edge>> adjEdList ){
+    /* les deux algorithme sont ecrit exactement de la meme dacon come dans le cours jsp esq c'est la meilleur solution
+    * par exemple le DFS est en deux partie
+    * si t'arrive pas a le comprendre va sur le cours
+    * */
+    public List<Node> getDFS(){
         boolean visited[] = new boolean[getAllNodes().size()];
         Node node = (Node) adjEdList.keySet();
         List<Node> list = new LinkedList<>();
-        list =   DFSUtil(node.getId(),visited);
+        list = DFSUtil(node.getId(),visited);
         return list;
     }//moi
 
     private List<Node> DFSUtil(int v, boolean visited[]){
         List<Node> listB = new LinkedList<>();
-       visited[v] = true;
-        Iterator<Edge> i = adjEdList.get(getNode(v)).listIterator();
+        visited[v] = true;
+        Iterator<Edge> i = this.adjEdList.get(getNode(v)).listIterator();
         while (i.hasNext()){
-            int n = i.next().idTo;
+            int n = i.next().to().getId();
             if (!visited[n]) {
                 List<Node> b =   DFSUtil(n,visited);
                 listB.addAll(b);
@@ -460,7 +457,7 @@ public class Graf {
         return listB;
     }
 
-    public List<Node> getBFS(Map<Node, List<Edge>> adjEdList) {
+    public List<Node> getBFS() {
         boolean visited[] = new boolean[getAllNodes().size()];
         LinkedList<Node> q =  new LinkedList<Node>();
         Node node = (Node) adjEdList.keySet();
@@ -469,9 +466,9 @@ public class Graf {
 
         while (q.size() != 0){
             Node s = q.poll();
-            Iterator<Edge> i = adjEdList.get(s).listIterator();
+            Iterator<Edge> i = this.adjEdList.get(s).listIterator();
             while (i.hasNext()){
-                int n = i.next().idTo;
+                int n = i.next().to().getId();
                 if (!visited[n]){
                     visited[n] =true;
                     q.add(getNode(n));

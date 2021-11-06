@@ -19,11 +19,10 @@ public class Node implements Comparable<Node> {
     
     @Override
     public boolean equals(Object obj) {
-     	if( !(obj instanceof Node) ) {
-     		
+        if( !(obj instanceof Node) ) {
      		return false;
-     		}
-     	return this.getId() == ((Node)obj).getId()  ;
+        }
+     	return this.getId() == ((Node)obj).getId();
      }
     
     @Override

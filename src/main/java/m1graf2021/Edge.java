@@ -5,17 +5,14 @@ public class Edge {
     private Node to;
     private int weight;
 
-    int idFrom ;
-    int idTo;
-
     public Edge(Node from, Node to) {
         this.from = from;
         this.to = to;
     }
 
     public Edge(int idFrom, int idTo) {
-        this.idTo = idTo;
-        this.idFrom = idFrom;
+        this.from = new Node(idFrom);
+        this.to = new Node(idTo);
     }
 
     public Edge(Node from, Node to, int weight) {
@@ -25,9 +22,9 @@ public class Edge {
     }
 
     public Edge(int idFrom, int idTo, int weight) {
-        this.idTo = to.getId();
+        this.from = new Node(idFrom);
         this.weight = weight;
-        this.idFrom =from.getId() ;
+        this.to = new Node(idTo);
     }
 
     public Node from() {
