@@ -20,11 +20,13 @@ public class Graf {
             for(int i=0; i< number.length; i++) {
                 int val = number[i];
 
-                if(val == 0) {
+                // We also test that the 0 is not the final 0
+                // in which case we shouldn't create a new node
+                if(val == 0 && i != (number.length - 1)) {
                     currentNodeId++;
                     this.adjEdList.put(new Node(currentNodeId), new ArrayList<>());
                 }
-                else {
+                else if(val != 0){ // in order to prevent the final 0 to be processed in this block
                     this.adjEdList.get(getNode(currentNodeId)).add(new Edge(currentNodeId, val));
                 }
             }
@@ -347,10 +349,11 @@ public class Graf {
         }
 
         // TODO test length of successorArray
-        int[] successorArray = new int[(adjEdList.size() - 2) + nbEdge];
+        int[] successorArray = new int[(adjEdList.size() - 1) + nbEdge];
 
         int cursor = 0;
-        for(Node node : adjEdList.keySet()) {
+        for(int i=0; i<adjEdList.size(); i++) {
+            Node node = getNode(i+1);
             if(node.getId() != 1 && node.getId() != 0) {
                 successorArray[cursor] = 0;
                 cursor++;
@@ -370,16 +373,16 @@ public class Graf {
         int matrix [][] = new int[this.nbNodes()][this.nbNodes()];
         for (int i = 0 ; i < matrix.length;i++ ){
             for (int y = 0 ; y< matrix.length;y++){
-            matrix[i][y] = 0;
+                matrix[i][y] = 0;
             }//la je parcoure la matrice et je met des zero
+        }
 
-            for(Map.Entry entry : this.adjEdList.entrySet()){
-                List<Edge> list = (List)entry.getValue();
-              Node node= (Node)  entry.getKey();
-              int k = node.getId();
-                for (Edge e: list){
-                   matrix[k][e.to().getId()] += 1;// la je parcour la la map ou jsp quoi et je met des 1 :)
-                }
+        for(Map.Entry entry : this.adjEdList.entrySet()){
+            List<Edge> list = (List)entry.getValue();
+            Node node= (Node)  entry.getKey();
+            int k = node.getId() - 1;
+            for (Edge e: list){
+                matrix[k][e.to().getId() - 1] += 1;// la je parcour la la map ou jsp quoi et je met des 1 :)
             }
         }
 
@@ -460,8 +463,8 @@ public class Graf {
     public List<Node> getBFS() {
         boolean visited[] = new boolean[getAllNodes().size()];
         LinkedList<Node> q =  new LinkedList<Node>();
-        Node node = (Node) adjEdList.keySet();
-        visited[node.getId()]= true;
+        Node node = getNode(1);
+        visited[node.getId() - 1] = true;
         q.add(node);
 
         while (q.size() != 0){
@@ -469,12 +472,11 @@ public class Graf {
             Iterator<Edge> i = this.adjEdList.get(s).listIterator();
             while (i.hasNext()){
                 int n = i.next().to().getId();
-                if (!visited[n]){
-                    visited[n] =true;
+                if (!visited[n-1]){
+                    visited[n-1] =true;
                     q.add(getNode(n));
                 }
             }
-
         }
         return q;
     }//moi
@@ -490,4 +492,34 @@ public class Graf {
         return null;
     }
 
+    public static Graf fromDotString(String dotString) {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Graf)) return false;
+
+        Graf grafParam = (Graf) obj;
+
+        if(this.nbNodes() != grafParam.nbNodes()) return false;
+
+        boolean grafsAreEquals = true;
+        for(int i=0; i< this.nbNodes(); i++) {
+            Node nodeGraf = this.getNode(i+1);
+            Node nodeGrafParam = grafParam.getNode(i+1);
+
+            List<Edge> edgesNodeGraf = this.adjEdList.get(nodeGraf);
+            List<Edge> edgesNodeGrafParam = grafParam.getAdjEdList().get(nodeGrafParam);
+
+            // &= nodes are equals and list of arrays are equals
+            grafsAreEquals &= nodeGraf.equals(nodeGrafParam)
+                    & edgesNodeGraf.size() == edgesNodeGrafParam.size()
+                    & edgesNodeGraf.containsAll(edgesNodeGrafParam) & edgesNodeGrafParam.containsAll(edgesNodeGraf);
+
+            if(!grafsAreEquals) return false;
+        }
+
+        return grafsAreEquals;
+    }
 }

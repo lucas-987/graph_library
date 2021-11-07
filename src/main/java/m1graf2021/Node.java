@@ -35,4 +35,9 @@ public class Node implements Comparable<Node> {
             return 0;
         }
     }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
 }

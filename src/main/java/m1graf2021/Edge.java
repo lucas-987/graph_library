@@ -1,6 +1,8 @@
 package m1graf2021;
 
-public class Edge {
+import java.util.Objects;
+
+public class Edge implements Comparable<Edge> {
     private Node from;
     private Node to;
     private int weight;
@@ -49,5 +51,21 @@ public class Edge {
             return false;
         }
         return this.from.equals(((Edge) obj).from) && this.to.equals(((Edge) obj).to);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.from.getId(), this.to.getId());
+    }
+
+    @Override
+    public int compareTo(Edge edge) {
+        if(this.from.getId() > edge.from.getId()) return 1;
+        else if(this.from.getId() < edge.from.getId()) return -1;
+        else {
+            if(this.to.getId() > edge.to.getId()) return 1;
+            else if(this.to.getId() < edge.to.getId()) return -1;
+            else return 0;
+        }
     }
 }
