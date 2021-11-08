@@ -1,6 +1,15 @@
 package m1graf2021;
 
+import javax.sound.sampled.AudioFormat;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Graf {
     Map<Node, List<Edge>> adjEdList;
@@ -92,11 +101,29 @@ public class Graf {
     }
 
     public void addNode(Node n) {
-        adjEdList.put(n, new ArrayList<>());
+        if(!existsNode(n)) {
+            List<Node> allNodes = getAllNodes();
+            Collections.sort(allNodes);
+
+            int lastNodeId;
+            if(allNodes.size() > 0) {
+                lastNodeId = allNodes.get(allNodes.size() -1).getId();
+            }
+            else {
+                lastNodeId = 1;
+            }
+
+            if(n.getId() - lastNodeId > 1) {
+                for(int i = lastNodeId; i<n.getId(); i++) {
+                    adjEdList.put(new Node(i), new ArrayList<>());
+                }
+            }
+            adjEdList.put(n, new ArrayList<>());
+        }
     }
 
     public void addNode(int id) {
-        adjEdList.put(new Node(id), new ArrayList<>());
+        addNode(new Node(id));
     }
 
     public void removeNode(Node n) {
@@ -201,6 +228,21 @@ public class Graf {
     public void addEdge(int fromId, int toId) {
         if(existsNode(fromId) && existsNode(toId)) { // TODO this condition is checked twice (because it is checked in the call to addEdge(Node, Node))
             addEdge(getNode(fromId), getNode(toId));
+        }
+    }
+
+    public void addEdge(Node from, Node to, Integer weight) {
+        if(existsNode(from) && existsNode(to)) {
+            if(weight == null)
+                adjEdList.get(from).add(new Edge(from, to));
+            else
+                adjEdList.get(from).add(new Edge(from, to, weight));
+        }
+    }
+
+    public void addEdge(int fromId, int toId, Integer weight) {
+        if(existsNode(fromId) && existsNode(toId)) { // TODO this condition is checked twice (because it is checked in the call to addEdge(Node, Node))
+            addEdge(getNode(fromId), getNode(toId), weight);
         }
     }
 
@@ -482,18 +524,114 @@ public class Graf {
     }//moi
 
     public String toDotString(){
-        return null;
+        String result = "";
+
+        boolean directed = !(this instanceof UndirectedGraf);
+
+        result += (directed ? "digraph" : "graph") + " {\n";
+
+        for(Node node : this.getAllNodes()) {
+            for(Edge edge : adjEdList.get(node)) {
+                result += "    " + edge.from().getId() + " " + (directed ? "->" : "--") + " " + edge.to().getId();
+
+                Integer weight = edge.getWeight();
+                if(weight != null) {
+                    result += " [len=" + weight + ", label=" + weight + "]";
+                }
+
+                result += "\n";
+            }
+        }
+
+        result += "}";
+
+        return result;
     }
 
     public void toDotFile(String fileName){
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(fileName + ".gv");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String dotString = toDotString();
+        pw.print(dotString);
+        pw.close();
     }
 
     public static Graf fromDotFile(String path) {
-        return null;
+        Graf result = null;
+        try{
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            String dotString = new String(encoded, StandardCharsets.UTF_8);
+            result = fromDotString(dotString);
+        }
+        catch (IOException e) {
+        }
+        return result;
     }
 
     public static Graf fromDotString(String dotString) {
-        return null;
+        String lines[] = dotString.split("\\R+");
+
+        Graf graf = null;
+
+        for(int i=0; i< lines.length; i++) {
+            String line = lines[i];
+            line = line.trim();
+            line.replaceAll("\\s+"," ");
+
+            if(line.charAt(0) != '#') {
+                String words[] = line.split(" ");
+
+                switch (words[0]) {
+                    case "digraph":
+                        if (graf == null) graf = new Graf();
+                        break;
+                    case "graph":
+                        if (graf == null) graf = new UndirectedGraf();
+                        break;
+                    default:
+                        if (graf != null) {
+                            if (words[0].matches("\\d+")) {
+                                int fromId = Integer.valueOf(words[0]);
+                                if (!graf.existsNode(fromId))
+                                    graf.addNode(fromId);
+
+                                if (words.length >= 3) {
+                                    if (words[1].equals("->") || words[1].equals("--")) {
+                                        String toIds[] = words[2].replaceAll(";", "").split(",");
+                                        for (String toIdString : toIds) {
+                                            if (toIdString.matches("\\d+")) {
+                                                int toId = Integer.valueOf(toIdString);
+                                                if (!graf.existsNode(toId))
+                                                    graf.addNode(toId);
+
+                                                Integer weight = null;
+                                                if (words.length >= 4) {
+                                                    Matcher matcher = Pattern.compile("\\[(len|label)=-?\\d+(,|\\])").matcher(words[3]);
+                                                    if(matcher.find()) {
+                                                        String weightWord = matcher.group(0);
+                                                        Matcher matcherInt = Pattern.compile("-?\\d+").matcher(weightWord);
+
+                                                        if(matcherInt.find()) {
+                                                            weight = Integer.valueOf(matcherInt.group(0));
+                                                        }
+                                                    }
+                                                }
+                                                graf.addEdge(fromId, toId, weight);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        return graf;
     }
 
     @Override

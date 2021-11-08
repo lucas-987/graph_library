@@ -282,6 +282,38 @@ public class GrafTest {
     }
 
     @Test
+    public void testToDotString() {
+        Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
+        String actualDotString = graf.toDotString();
+        System.out.println("breakpoint");
+    }
+
+    @Test
+    public void testToDotFile() {
+        Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
+        graf.toDotFile("/media/lucas/Data/Users/User/Documents/cours/master/m1/graphes/dotFile");
+    }
+
+    @Test
+    public void testFromDotString() {
+        String dotString = "digraph test {\n" +
+                            "     1 -> 6;\n" +
+                            "     3 -> 1, 7;\n" +
+                            "     4 -> 3 [len=8]\n" +
+                            "     3 -> 8 [label=14]\n" +
+                            "     8 -> 2 [label=-8, len=-8]\n";
+
+        Graf actualGraf = Graf.fromDotString(dotString);
+        Graf expectedGraf = new Graf(6,0,0,1,7,8,0,3,0,0,0,2,0);
+    }
+
+    @Test
+    public void testFromDotFile() {
+        Graf actualGraf = Graf.fromDotFile("/media/lucas/Data/Users/User/Documents/cours/master/m1/graphes/dotFileGenerated.gv");
+        System.out.println("breakpoint");
+    }
+
+    @Test
     public void testEquals() {
         Graf graf1 = new Graf(2,2,3,0,1,0,2,0);
         Graf copyGraf1 = new Graf(2,2,3,0,1,0,2,0);

@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Edge implements Comparable<Edge> {
     private Node from;
     private Node to;
-    private int weight;
+    private Integer weight;
 
     public Edge(Node from, Node to) {
         this.from = from;
@@ -35,6 +35,14 @@ public class Edge implements Comparable<Edge> {
 
     public Node to() {
         return to;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Edge getSymmetric() {
