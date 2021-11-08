@@ -223,13 +223,24 @@ public class GrafTest {
     @Test
     public void testGetBFS() {
         Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
+        Graf graf2 = new Graf(2,0,1,3,4,0,0,13,14,0,6,0,7,0,5,9,10,0,0,0,11,12,0,0,0,0,15,0,16,0,0,8,17,0);
 
-        List<Node> actualBFS = graf.getBFS();
+        Graf graf3 = new Graf(2,0,3,0,1,0);
+        Graf graf4 = new Graf(2,3,0,4,5,0,0,0,0);
 
-        List<Node> opened = graf.getAllNodes();
+        Graf graf5 = new Graf(2,0,4,0,0,0);
+
+        List<Node> actualBFS = graf5.getBFS();
+        /*List<Node> test = graf2.getBFS();*/
+
+        //List<Node> test = graf3.getBFS();
+
+
+        List<Node> opened = graf5.getAllNodes();
         List<Node> closed = new ArrayList<>();
 
-        int nbNodes = graf.nbNodes();
+        int nbNodes = graf5.nbNodes();
+        Assert.assertEquals(nbNodes, actualBFS.size());
 
         for(int i=1; i<nbNodes; i++) {
             List<Node> nodesInside = actualBFS.subList(0,i-1);
@@ -277,6 +288,13 @@ public class GrafTest {
     @Test
     public void testGetDFS() {
         Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
+        Graf graf2 = new Graf(2,0,1,3,4,0,0,13,14,0,6,0,7,0,5,9,10,0,0,0,11,12,0,0,0,0,15,0,16,0,0,8,17,0);
+
+        Graf graf3 = new Graf(2,0,3,0,1,0);
+        Graf graf4 = new Graf(2,3,0,4,5,0,0,0,0);
+
+        Graf graf5 = new Graf(2,0,4,0,0,0);
+
         List<Node> actualDFS = graf.getDFS();
         System.out.println("debug break point");
     }
