@@ -1,6 +1,9 @@
 package m1graf2021;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -174,46 +177,72 @@ public class UndirectedGraf extends Graf {
 
     @Override
     public List<Edge> getIncidentEdges(int nodeId) {
+        if(!existsNode(nodeId)) return new ArrayList<>();
         return super.getIncidentEdges(nodeId);
     }
 
     @Override
-    public List<Edge> getAllEdges() {
-        return super.getAllEdges();
-    }
-
-    @Override
     public int inDegree(Node n) {
-        return super.inDegree(n);
+        return degree(n);
     }
 
     @Override
     public int outDegree(Node n) {
-        return super.outDegree(n);
+        return degree(n);
     }
 
     @Override
     public int degree(Node n) {
-        return super.degree(n);
-    }
-
-    @Override
-    public int[] toSuccessorArray() {
-        return super.toSuccessorArray();
-    }
-
-    @Override
-    public int[][] toAdjMatrix() {
-        return super.toAdjMatrix();
+        return super.degree(n) / 2;
     }
 
     @Override
     public Graf getReverse() {
-        return super.getReverse();
+        return this;
     }
 
     @Override
-    public Graf getTransitiveClosure() {
-        return super.getTransitiveClosure();
+    public String toDotString() {
+        String result = "";
+
+        boolean directed = !(this instanceof UndirectedGraf);
+
+        result += (directed ? "digraph" : "graph") + " {\n";
+
+        HashMap<Node, List<Edge>> adjEdListCopy = new HashMap<>();
+        adjEdListCopy.putAll(adjEdList);
+
+        for(Node node : this.getAllNodes()) {
+            for(Edge edge : adjEdListCopy.get(node)) {
+                result += "    " + edge.from().getId() + " " + (directed ? "->" : "--") + " " + edge.to().getId();
+
+                Integer weight = edge.getWeight();
+                if(weight != null) {
+                    result += " [len=" + weight + ", label=" + weight + "]";
+                }
+
+                result += "\n";
+                adjEdListCopy.get(edge.to()).remove(edge.getSymmetric());
+            }
+        }
+
+        result += "}";
+
+        return result;
     }
+
+    @Override
+    public void toDotFile(String fileName) {
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(fileName + ".gv");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String dotString = toDotString();
+        pw.print(dotString);
+        pw.close();
+    }
+
+
 }

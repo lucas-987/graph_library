@@ -641,6 +641,8 @@ public class Graf {
                                                     }
                                                 }
                                                 graf.addEdge(fromId, toId, weight);
+                                                if(graf instanceof UndirectedGraf)
+                                                    graf.addEdge(toId, fromId, weight);
                                             }
                                         }
                                     }
