@@ -80,6 +80,42 @@ public class UndirectedGraf extends Graf {
 
         return nbEdge;
     }
+//
+    @Override
+    public void addEdge(Node from, Node to) {
+        super.addEdge(from, to);
+        super.addEdge(to, from);
+    }
+
+    @Override
+    public void addEdge(int fromId, int toId) {
+        super.addEdge(fromId, toId);
+        super.addEdge(toId, fromId);
+    }
+
+    @Override
+    public void addEdge(Node from, Node to, Integer weight) {
+        super.addEdge(from, to, weight);
+        super.addEdge(to, from, weight);
+    }
+
+    @Override
+    public void addEdge(int fromId, int toId, Integer weight) {
+        super.addEdge(fromId, toId, weight);
+        super.addEdge(toId,fromId, weight);
+    }
+
+    @Override
+    public void removeEdge(Node from, Node to) {
+        super.removeEdge(from, to);
+        super.removeEdge(to, from);
+    }
+
+    @Override
+    public void removeEdge(int fromId, int toId) {
+        super.removeEdge(fromId, toId);
+        super.removeEdge(toId, fromId);
+    }
 
     @Override
     public List<Node> getSuccessors(Node n) {

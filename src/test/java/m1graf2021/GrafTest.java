@@ -285,7 +285,7 @@ public class GrafTest {
         Assert.assertTrue(true);
     }
 
-    /*@Test*/
+    @Test
     public void testGetDFS() {
         Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
         Graf graf2 = new Graf(2,0,1,3,4,0,0,13,14,0,6,0,7,0,5,9,10,0,0,0,11,12,0,0,0,0,15,0,16,0,0,8,17,0);
@@ -295,7 +295,8 @@ public class GrafTest {
 
         Graf graf5 = new Graf(2,0,4,0,0,0);
 
-        List<Node> actualDFS = graf.getDFS();
+        Graf graf6 = new Graf(2,0,4,0,0,0,0);
+        List<Node> actualDFS = graf6.getDFS();
         System.out.println("debug break point");
     }
 
