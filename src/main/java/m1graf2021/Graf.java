@@ -684,6 +684,8 @@ public class Graf {
                   }
               }
         }
+
+        Collections.reverse(list);
         return list;
 
     }
@@ -701,6 +703,7 @@ public class Graf {
             }
         }
 
+
         listB.add(getNode(v));
         return listB;
     }
@@ -717,25 +720,27 @@ public class Graf {
         Node node = getNode(1);
         q.add(node);
         visited[node.getId() - 1] = true;
-        resutl.add(node);
+        /*resutl.add(node);*/
         while (q.size() != 0 || !resutl.containsAll(getAllNodes())){
             if (q.size() == 0 && !resutl.containsAll(getAllNodes())){
                 for (Node node1 : getAllNodes()){
-                    if (resutl.contains(node1) ){
+                    if (!resutl.contains(node1) ){
                         q.add(node1);
                         break;
                     }
                 }
             }
                 Node s = q.poll();
+            visited[s.getId()-1] = true;
+            resutl.add(s);
+
                 Iterator<Edge> i  = this.adjEdList.get(s).listIterator();
                 while (i.hasNext()){
                 int n = i.next().to().getId();
                 if (!visited[n-1]){
-                    visited[n-1] =true;
+                    /*visited[n-1] =true;*/
                     q.add(getNode(n));
-                    resutl.add(getNode(n));
-
+/*                    resutl.add(getNode(n));*/
                 }
             }
         }

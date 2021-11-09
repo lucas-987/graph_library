@@ -12,6 +12,10 @@ public class Node implements Comparable<Node> {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
