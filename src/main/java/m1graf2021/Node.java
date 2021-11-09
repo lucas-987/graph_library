@@ -13,14 +13,19 @@ public class Node implements Comparable<Node> {
     }
 
     /**
-     *
-     * @return
+     * a getter fot the id field
+     * @return the id
      */
     public int getId() {
         return id;
     }
 
-    
+
+
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if( !(obj instanceof Node) ) {
@@ -28,7 +33,12 @@ public class Node implements Comparable<Node> {
         }
      	return this.getId() == ((Node)obj).getId();
      }
-    
+
+
+    /**
+     *
+     * @return
+     */
     @Override
     public int compareTo(Node node) {
         if (Node.this.id< node.id){
@@ -40,6 +50,11 @@ public class Node implements Comparable<Node> {
         }
     }
 
+
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return this.id;

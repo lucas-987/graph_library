@@ -29,30 +29,59 @@ public class Edge implements Comparable<Edge> {
         this.to = new Node(idTo);
     }
 
+    /**
+     * a getter for  the from field
+     * @return
+     */
     public Node from() {
         return from;
     }
 
+    /**
+     * a getter for the to field
+     * @return
+     */
     public Node to() {
         return to;
     }
 
+    /**
+     * a getter for the Weight field
+     * @return
+     */
     public Integer getWeight() {
         return weight;
     }
 
+    /**
+     *  a setter for the Weight field
+     * @param weight
+     */
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
+    /**
+     *
+     * @return the symmetric of the edge
+     */
     public Edge getSymmetric() {
         return new Edge(this.to, this.from);
     }
 
+    /**
+     *
+     * @return true if the edge is a self loop
+     */
     boolean isSelfLoop() {
         return this.from.equals(this.to);
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Edge)) {
@@ -62,11 +91,20 @@ public class Edge implements Comparable<Edge> {
         // TODO take weights into account
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.from.getId(), this.to.getId());
     }
 
+    /**
+     *
+     * @param edge
+     * @return
+     */
     @Override
     public int compareTo(Edge edge) {
         if(this.from.getId() > edge.from.getId()) return 1;
