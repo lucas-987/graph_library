@@ -14,10 +14,17 @@ import java.util.regex.Pattern;
 public class Graf {
     Map<Node, List<Edge>> adjEdList;
 
+    /**
+     * Create an empty Graf
+     */
     public Graf() {
         this.adjEdList = new HashMap<>();
     }
 
+    /**
+     * Create a Graf from an int[] corresponding to a successor array of a graph
+     * @param number, the array corresponding to a successor array
+     */
     public Graf(int... number) {
         this.adjEdList = new HashMap<>();
 
@@ -42,10 +49,18 @@ public class Graf {
         }
     }
 
+    /**
+     * Create a Graf from an adjacency list
+     * @param adjEdList, a Map<Node, List<Edge>> describing the graph
+     */
     public Graf(Map<Node, List<Edge>> adjEdList) {
         this.adjEdList = adjEdList;
     }
 
+    /**
+     * A constructor creating a graph corresponding to the adjacency matrix given in parameter
+     * @param adjacencyMatrix, an int[][] representing the adjacency matrix of the graph to create
+     */
     public Graf(int[][] adjacencyMatrix) {
         this.adjEdList = new HashMap<>();
 
@@ -71,21 +86,35 @@ public class Graf {
     }
 
     /**
-     * For testing purpose only
-     * @return
+     * A getter for the adjEdList field
+     * @return the adjEdList field
      */
     public Map<Node, List<Edge>> getAdjEdList() {
         return this.adjEdList;
     }
 
+    /**
+     * Return the number of nodes.
+     * @return The number of nodes.
+     */
     public int nbNodes() {
         return this.adjEdList.size();
     }
 
+    /**
+     * Tests the existence of node.
+     * @param n, the node to test
+     * @return true if the node exists in the graph, false otherwise
+     */
     public boolean existsNode(Node n) {
         return adjEdList.containsKey(n);
     }
 
+    /**
+     * Tests the existence of node.
+     * @param id, the id of the node to test
+     * @return true if the node exists in the graph, false otherwise
+     */
     public boolean existsNode(int id) {
         for(Node key : adjEdList.keySet()) {
             if(key.getId() == id) return true;
@@ -93,6 +122,11 @@ public class Graf {
         return false;
     }
 
+    /**
+     * Get a node by id
+     * @param id, the id of the node to get
+     * @return The corresponding node
+     */
     public Node getNode(int id) {
         for(Node key : adjEdList.keySet()) {
             if(key.getId() == id) return key;
@@ -100,6 +134,10 @@ public class Graf {
         return null;
     }
 
+    /**
+     * Add a node to the graph
+     * @param n, the node to add
+     */
     public void addNode(Node n) {
         if(!existsNode(n)) {
             List<Node> allNodes = getAllNodes();
@@ -122,10 +160,18 @@ public class Graf {
         }
     }
 
+    /**
+     * Add a node to the graph
+     * @param id, the id of the node to add
+     */
     public void addNode(int id) {
         addNode(new Node(id));
     }
 
+    /**
+     * Remove a node from the graph
+     * @param n, the node to remove
+     */
     public void removeNode(Node n) {
         adjEdList.remove(n);
         for(List<Edge> neighbors : adjEdList.values()) {
@@ -138,10 +184,19 @@ public class Graf {
         }
     }
 
+    /**
+     * Remove a node from the graph
+     * @param id, the id of the node to remove
+     */
     public void removeNode(int id) {
         removeNode(getNode(id));
     }
 
+    /**
+     * Get the successors/neighbours of a node
+     * @param n, the node
+     * @return a List<Node> containing the result
+     */
     public List<Node> getSuccessors(Node n) {
         List<Node> result = new ArrayList<>();
 
@@ -154,10 +209,21 @@ public class Graf {
         return result;
     }
 
+    /**
+     * Get the successors/neighbours of a node
+     * @param id, the id of the node
+     * @return a List<Node> containing the result
+     */
     public List<Node> getSuccessors(int id) {
         return getSuccessors(getNode(id));
     }
 
+    /**
+     * Boolean indicating if u and v are adjacents
+     * @param u A node
+     * @param v Another node
+     * @return true if they are adjacent, false otherwise
+     */
     public boolean adjacent(Node u, Node v) {
 
         for(Edge e : adjEdList.get(u)) {
@@ -173,16 +239,30 @@ public class Graf {
         return false;
     }
 
+    /**
+     * Boolean indicating if u and v are adjacents
+     * @param idU The id of a node
+     * @param idV The id of an other node
+     * @return true if they are adjacent, false otherwise
+     */
     public boolean adjacent(int idU, int idV) {
         return adjacent(getNode(idU), getNode(idV));
     }
 
+    /**
+     *
+     * @return A List<Node> containing all the nodes of the graph
+     */
     public List<Node> getAllNodes() {
         List<Node> result = new ArrayList<>();
         result.addAll(adjEdList.keySet());
         return result;
     }
 
+    /**
+     *
+     * @return The largest id of node
+     */
     public int largestNodeId() {
         List<Node> allNodes = getAllNodes();
         int maxId = allNodes.get(0).getId();
@@ -195,6 +275,10 @@ public class Graf {
         return maxId;
     }
 
+    /**
+     *
+     * @return The number of edges in the node
+     */
     public int nbEdges() {
         List<Edge> counted = new ArrayList<>();
         int result = 0;
@@ -211,26 +295,54 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param u, a node
+     * @param v, another node
+     * @return True if the edge between u and v exists
+     */
     public boolean existsEdge(Node u, Node v) {
         return adjEdList.containsValue(new Edge(u, v));
     }
 
+    /**
+     *
+     * @param idU, the id of a node
+     * @param idV, the id of another node
+     * @return True if there is an edge between idU and idV
+     */
     public boolean existsEdge(int idU, int idV) {
         return adjEdList.containsValue(new Edge(idU, idV));
     }
 
+    /**
+     * Add an edge to the graph going from the param "from" to the param "to"
+     * @param from, the source node of the edge
+     * @param to, the destination node of the edge
+     */
     public void addEdge(Node from, Node to) {
         if(existsNode(from) && existsNode(to)) {
             adjEdList.get(from).add(new Edge(from, to));
         }
     }
 
+    /**
+     * Add an edge to the graph going from the node corresponding to "fromId" to the node corresponding to "toId"
+     * @param fromId, the id of the source node of the edge
+     * @param toId, the id of the destination node of the edge
+     */
     public void addEdge(int fromId, int toId) {
         if(existsNode(fromId) && existsNode(toId)) { // TODO this condition is checked twice (because it is checked in the call to addEdge(Node, Node))
             addEdge(getNode(fromId), getNode(toId));
         }
     }
 
+    /**
+     * Add an edge to the graph going from the param "from" to the param "to"
+     * @param from, the source node of the edge
+     * @param to, the destination node of the edge
+     * @param weight, the weight of the edge
+     */
     public void addEdge(Node from, Node to, Integer weight) {
         if(existsNode(from) && existsNode(to)) {
             if(weight == null)
@@ -240,12 +352,23 @@ public class Graf {
         }
     }
 
+    /**
+     * Add an edge to the graph going from the node corresponding to "fromId" to the node corresponding to "toId"
+     * @param fromId, the id of the source node of the edge
+     * @param toId, the of the destination node of the edge
+     * @param weight, the weight of the edge
+     */
     public void addEdge(int fromId, int toId, Integer weight) {
         if(existsNode(fromId) && existsNode(toId)) { // TODO this condition is checked twice (because it is checked in the call to addEdge(Node, Node))
             addEdge(getNode(fromId), getNode(toId), weight);
         }
     }
 
+    /**
+     * Remove the edge defined by from and to
+     * @param from, the source node of the edge
+     * @param to, the destination node of the edge
+     */
     public void removeEdge(Node from, Node to) {
         List<Edge> successorsEdge = adjEdList.get(from);
 
@@ -257,6 +380,11 @@ public class Graf {
         }
     }
 
+    /**
+     * Remove the edge defined by fromId and toId
+     * @param fromId, the id of the source node of the edge
+     * @param toId, the id of the destination of the edge
+     */
     public void removeEdge(int fromId, int toId) {
         Node from = getNode(fromId);
         Node to = getNode(toId);
@@ -265,12 +393,22 @@ public class Graf {
             removeEdge(from, to);
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return A list containing the out edges of n
+     */
     public  List<Edge> getOutEdges(Node n){
         if(existsNode(n))
             return adjEdList.get(n);
         else return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param nodeId, the id of a node
+     * @return A list containing the out edges of the node defined by nodeId
+     */
     public List<Edge> getOutEdges(int nodeId) {
         if(existsNode(nodeId)) {
             return getOutEdges(getNode(nodeId));
@@ -278,6 +416,11 @@ public class Graf {
         else return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return A list containing the in edges of n
+     */
     public List<Edge> getInEdges(Node n) {
         List<Edge> result = new ArrayList<>();
 
@@ -295,6 +438,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param nodeId, the id of a node
+     * @return A list containing the in edges of the node defined by nodeId
+     */
     public List<Edge> getInEdges(int nodeId) {
         if(existsNode(nodeId)) {
             return getInEdges(getNode(nodeId));
@@ -302,6 +450,11 @@ public class Graf {
         else return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return A list containing the incident edges of n
+     */
     public List<Edge> getIncidentEdges(Node n){
         List<Edge> result = new ArrayList<>();
 
@@ -319,6 +472,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param nodeId, the id of a node
+     * @return A list containing the incident edges of the node defined by nodeId
+     */
     public List<Edge> getIncidentEdges(int nodeId) {
         if(existsNode(nodeId)) {
             return getIncidentEdges(getNode(nodeId));
@@ -326,6 +484,10 @@ public class Graf {
         else return new ArrayList<>();
     }
 
+    /**
+     *
+     * @return A list containing all edges of the graph
+     */
     public List<Edge> getAllEdges(){
         List<Edge> result = new ArrayList<>();
 
@@ -336,6 +498,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return The indegree of n
+     */
     public int inDegree(Node n){
         if(!existsNode(n)) return -1;
 
@@ -352,6 +519,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return The outdegree of n
+     */
     public int outDegree(Node n){
         if(!existsNode(n)) return -1;
 
@@ -365,6 +537,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @param n, a node
+     * @return The degree of n
+     */
     public int degree(Node n){
         if(!existsNode(n)) return -1;
 
@@ -384,6 +561,10 @@ public class Graf {
         return result;
     }
 
+    /**
+     *
+     * @return The successor array (int[]) defining the graph
+     */
     public int[] toSuccessorArray(){
         int nbEdge = 0;
         for(List<Edge> edges : adjEdList.values()) {
@@ -409,6 +590,10 @@ public class Graf {
         return successorArray;
     }
 
+    /**
+     *
+     * @return The adjacencyMatrix (int[][]) defining the graph
+     */
     public int[][] toAdjMatrix(){
 
         int matrix [][] = new int[this.nbNodes()][this.nbNodes()];
@@ -431,6 +616,10 @@ public class Graf {
 
     }
 
+    /**
+     *
+     * @return A Graf corresponding to the transpose of the graph
+     */
     public Graf getReverse(){
         Map<Node, List<Edge>> reverseAdjList = new HashMap<>();
 
@@ -448,6 +637,10 @@ public class Graf {
         return new Graf(reverseAdjList);
     }
 
+    /**
+     *
+     * @return A Graf corresponding to the transitive closure of the graph
+     */
     public Graf getTransitiveClosure(){
         int[][] result = toAdjMatrix();
 
@@ -473,7 +666,10 @@ public class Graf {
         return new Graf(result);
     }
 
-
+    /**
+     *
+     * @return A list corresponding to a Depth First Search walk of the graph
+     */
     public List<Node> getDFS(){
         boolean visited[] = new boolean[getAllNodes().size()];
         List<Node> list  = new LinkedList<>() ;
@@ -510,9 +706,10 @@ public class Graf {
     }
 
 
-
-
-
+    /**
+     *
+     * @return A list corresponding to a Breath First Search walk of the graph
+     */
     public List<Node> getBFS() {
         boolean visited[] = new boolean[getAllNodes().size()];
         LinkedList<Node> q =  new LinkedList<Node>();
@@ -546,8 +743,10 @@ public class Graf {
     }
 
 
-
-
+    /**
+     *
+     * @return A string describing the graph in the dot format
+     */
     public String toDotString(){
         String result = "";
 
@@ -573,10 +772,14 @@ public class Graf {
         return result;
     }
 
+    /**
+     * Write a description of the graph in the dot format in the file given in parameters
+     * @param fileName, the path to the file (it will be created if the file doesn't exist), the extension needs to be provided
+     */
     public void toDotFile(String fileName){
         PrintWriter pw = null;
         try {
-            pw = new PrintWriter(fileName + ".gv");
+            pw = new PrintWriter(fileName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -585,6 +788,11 @@ public class Graf {
         pw.close();
     }
 
+    /**
+     * Construct a Graf object by reading a dot file
+     * @param path, the path the to file
+     * @return A Graf corresponding to the description provided by the file
+     */
     public static Graf fromDotFile(String path) {
         Graf result = null;
         try{
@@ -597,6 +805,11 @@ public class Graf {
         return result;
     }
 
+    /**
+     * Construct a Graf object from a String describing the graph in the dot format
+     * @param dotString, a String describing a graph in the dot format
+     * @return A Graf corresponding to the description provided by dotString
+     */
     public static Graf fromDotString(String dotString) {
         String lines[] = dotString.split("\\R+");
 
