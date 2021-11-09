@@ -42,11 +42,11 @@ public class Graf {
         }
     }
 
-    private Graf(Map<Node, List<Edge>> adjEdList) {
+    public Graf(Map<Node, List<Edge>> adjEdList) {
         this.adjEdList = adjEdList;
     }
 
-    private Graf(int[][] adjacencyMatrix) {
+    public Graf(int[][] adjacencyMatrix) {
         this.adjEdList = new HashMap<>();
 
         int nbNodes = adjacencyMatrix.length;
