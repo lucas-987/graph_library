@@ -220,7 +220,7 @@ public class GrafTest {
         Assert.assertEquals(expectedTransitiveClosure, actualTransitiveClosure);
     }
 
-    /*@Test*/
+    @Test
     public void testGetBFS() {
         Graf graf = new Graf(2,2,0,1,2,0,3,4,4,4,0,0);
         Graf graf2 = new Graf(2,0,1,3,4,0,0,13,14,0,6,0,7,0,5,9,10,0,0,0,11,12,0,0,0,0,15,0,16,0,0,8,17,0);
@@ -229,17 +229,18 @@ public class GrafTest {
         Graf graf4 = new Graf(2,3,0,4,5,0,0,0,0);
 
         Graf graf5 = new Graf(2,0,4,0,0,0);
+        Graf graf6 = new Graf(2,0,4,0,0,0,0);
 
-        List<Node> actualBFS = graf5.getBFS();
+        List<Node> actualBFS = graf2.getBFS();
         /*List<Node> test = graf2.getBFS();*/
 
         //List<Node> test = graf3.getBFS();
 
 
-        List<Node> opened = graf5.getAllNodes();
+        List<Node> opened = graf2.getAllNodes();
         List<Node> closed = new ArrayList<>();
 
-        int nbNodes = graf5.nbNodes();
+        int nbNodes = graf2.nbNodes();
         Assert.assertEquals(nbNodes, actualBFS.size());
 
         for(int i=1; i<nbNodes; i++) {
