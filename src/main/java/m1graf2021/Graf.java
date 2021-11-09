@@ -476,17 +476,18 @@ public class Graf {
 
     public List<Node> getDFS(){
         boolean visited[] = new boolean[getAllNodes().size()];
-        Node node = getNode(1);
-        List<Node> list = new LinkedList<>();
-        list = DFSUtil(node.getId(),visited);
-  /*      if (!list.containsAll(getAllNodes())){
+        List<Node> list  = new LinkedList<>() ;
+
+
+        list = DFSUtil(1,visited);
+        while (!list.containsAll(getAllNodes())){
               for(Node node1 : getAllNodes()){
-                  if (list.contains(node1)){
+                  if (!list.contains(node1)){
                      list.addAll(DFSUtil(node1.getId(),visited));
                      break;
                   }
               }
-        }*/
+        }
         return list;
 
     }
@@ -494,7 +495,7 @@ public class Graf {
     private List<Node> DFSUtil(int v, boolean visited[]){
 
         List<Node> listB = new LinkedList<>();
-        visited[v] = true;
+        visited[v-1] = true;
         Iterator<Edge> i = this.adjEdList.get(getNode(v)).listIterator();
         while (i.hasNext()){
             int n = i.next().to().getId();
@@ -507,6 +508,10 @@ public class Graf {
         listB.add(getNode(v));
         return listB;
     }
+
+
+
+
 
     public List<Node> getBFS() {
         boolean visited[] = new boolean[getAllNodes().size()];
