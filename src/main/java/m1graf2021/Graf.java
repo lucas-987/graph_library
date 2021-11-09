@@ -391,20 +391,19 @@ public class Graf {
         }
 
         // TODO test length of successorArray
-        int[] successorArray = new int[(adjEdList.size() - 1) + nbEdge];
+        int[] successorArray = new int[(adjEdList.size()) + nbEdge];
 
         int cursor = 0;
         for(int i=0; i<adjEdList.size(); i++) {
             Node node = getNode(i+1);
-            if(node.getId() != 1 && node.getId() != 0) {
-                successorArray[cursor] = 0;
-                cursor++;
-            }
 
             for(Edge edge : adjEdList.get(node)) {
                 successorArray[cursor] = edge.to().getId();
                 cursor++;
             }
+
+            successorArray[cursor] = 0;
+            cursor++;
         }
 
         return successorArray;
@@ -673,10 +672,15 @@ public class Graf {
 
             // &= nodes are equals and list of arrays are equals
             grafsAreEquals &= nodeGraf.equals(nodeGrafParam)
-                    & edgesNodeGraf.size() == edgesNodeGrafParam.size()
-                    & edgesNodeGraf.containsAll(edgesNodeGrafParam) & edgesNodeGrafParam.containsAll(edgesNodeGraf);
+                    & edgesNodeGraf.size() == edgesNodeGrafParam.size();
 
             if(!grafsAreEquals) return false;
+
+            for(int j=0; j<edgesNodeGraf.size(); j++) {
+                Edge edgeNodeGraf = edgesNodeGraf.get(j);
+                Edge edgeNodeGrafParam = edgesNodeGrafParam.get(j);
+                if(!edgeNodeGraf.equals(edgeNodeGrafParam)) return false;
+            }
         }
 
         return grafsAreEquals;

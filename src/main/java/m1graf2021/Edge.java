@@ -59,6 +59,7 @@ public class Edge implements Comparable<Edge> {
             return false;
         }
         return this.from.equals(((Edge) obj).from) && this.to.equals(((Edge) obj).to);
+        // TODO take weights into account
     }
 
     @Override
