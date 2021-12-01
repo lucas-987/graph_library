@@ -33,6 +33,8 @@ public class UndirectedGraf extends Graf {
         }
     }
 
+
+
     /**
      * Create a Graf from an adjacency list
      * @param adjEdList, a Map<Node, List<Edge>> describing the graph
@@ -413,5 +415,14 @@ public class UndirectedGraf extends Graf {
         pw.close();
     }
 
+    public Edge getEdge( Node from, Node to ){
+       for(List<Edge> edgesList : adjEdList.values()) {
+           for (Edge edge :  edgesList){
+               if(edge.from().equals(from) && edge.to().equals(to))
+                   return edge;
+           }
+       }
+       return null;
+    }
 
 }

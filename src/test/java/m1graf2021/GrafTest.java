@@ -1,5 +1,6 @@
 package m1graf2021;
 
+import chinesePostman.paireWiseMatchingStrategy.FloydWarshallPairMatchingStrategy;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -343,4 +344,6 @@ public class GrafTest {
         Assert.assertFalse(graf1.equals(graf2));
         Assert.assertTrue(graf1.equals(copyGraf1));
     }
+
+
 }
