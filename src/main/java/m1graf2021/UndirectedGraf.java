@@ -320,7 +320,7 @@ public class UndirectedGraf extends Graf {
     @Override
     public List<Edge> getIncidentEdges(int nodeId) {
         if(!existsNode(nodeId)) return new ArrayList<>();
-        return super.getIncidentEdges(nodeId);
+        return getIncidentEdges(getNode(nodeId));
     }
 
     /**
@@ -413,5 +413,10 @@ public class UndirectedGraf extends Graf {
         pw.close();
     }
 
-
+    public UndirectedGraf copy() {
+        // TODO new
+        UndirectedGraf copy = new UndirectedGraf();
+        copy.adjEdList = getAdjEdList();
+        return copy;
+    }
 }
